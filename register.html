@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransitX Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            background: #f0dfd0;
+        }
+        .left-panel {
+            width: 30%;
+            background: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .left-panel img {
+            width: 150px;
+        }
+        .right-panel {
+            width: 70%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-image: url('transport-bg.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .form-container {
+            width: 60%;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-box {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox input {
+            margin-right: 10px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .signin {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .signin a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <img src="transitx-logo.png" alt="TransitX Logo">
+    </div>
+    <div class="right-panel">
+        <div class="form-container">
+            <h2>Set up your account</h2>
+            <form id="registerForm">
+                <div class="input-box">
+                    <input type="text" id="username" placeholder="User Name" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="mobile" placeholder="Mobile Number" required>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="terms" required> Confirm Password
+                </div>
+                <button class="btn" type="submit">Continue</button>
+            </form>
+            <div class="signin">Already have an account? <a href="login.html">Sign in →</a></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const userData = {
+                username: document.getElementById("username").value,
+                mobile: document.getElementById("mobile").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+
+            const response = await fetch("http://localhost:5501/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        });
+    </script>
+
+</body>
+</html>

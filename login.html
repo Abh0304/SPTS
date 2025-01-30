@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransitX Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #d4a98f, #f0dfd0);
+        }
+        .container {
+            display: flex;
+            width: 800px;
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .left {
+            background: #f5f5f5;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .left img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        .left h1 {
+            font-size: 32px;
+            color: #332c2c;
+        }
+        .right {
+            background: #1e1e1e;
+            color: white;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .right h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .input-box {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            font-size: 16px;
+        }
+        .forgot {
+            text-align: right;
+            font-size: 12px;
+            color: gray;
+            margin-bottom: 20px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: none;
+            border: 2px solid white;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .register {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        .register a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="bus-icon.png" alt="Bus Icon">
+            <h1>TRANSITX</h1>
+        </div>
+        <div class="right">
+            <h2>WELCOME TO TRANSITX</h2>
+            <div class="input-box">
+                <input type="text" placeholder="Username">
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Password">
+            </div>
+            <div class="forgot">Forgot Password?</div>
+            <button class="btn">Sign in</button>
+            <div class="register">Don't have an account? <a href="register.html">Register for free</a></div>
+        </div>
+    </div>
+</body>
+</html>
