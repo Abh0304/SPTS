@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4caa1;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header input {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .header button {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .schedule {
+            margin-top: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+    <script>
+        function fetchSchedule() {
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            document.getElementById('route-display').innerText = from + " → " + to;
+            
+            // Simulating backend fetch with static data (replace with actual API call)
+            const scheduleData = [
+                { trainNo: "16342", time: "5:30 PM", name: "Intercity Express", frequency: "DAILY" },
+                { trainNo: "34587", time: "08:00 AM", name: "Kerala Express", frequency: "Daily" },
+                { trainNo: "94720", time: "09:15 AM", name: "Kochi Fast", frequency: "Weekdays" },
+            ];
+            
+            let scheduleHTML = '';
+            scheduleData.forEach(train => {
+                scheduleHTML += `<div class='schedule-item'><span>${train.trainNo}</span><span>${train.time}</span><span>${train.name}</span><span>${train.frequency}</span></div>`;
+            });
+            document.getElementById('schedule-list').innerHTML = scheduleHTML;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <input type="text" id="from" placeholder="Enter starting point">
+            <span>→</span>
+            <input type="text" id="to" placeholder="Enter destination">
+            <button onclick="fetchSchedule()">Search</button>
+        </div>
+        <div class="schedule">
+            <h3 id="route-display">Enter locations to search</h3>
+            <div id="schedule-list"></div>
+        </div>
+    </div>
+</body>
+</html>
