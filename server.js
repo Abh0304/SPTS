@@ -23,7 +23,7 @@ db.connect(err => {
     console.log("Connected to MySQL Database");
 });
 
-// API Route to Handle Registration
+// API Route to Handle User Registration
 app.post("/register", (req, res) => {
     const { username, mobile, email, password } = req.body;
     
@@ -37,7 +37,75 @@ app.post("/register", (req, res) => {
     });
 });
 
+// API Route to Handle User Login
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+    }
+
+    const sql = "SELECT * FROM users WHERE username = ?";
+    
+    db.query(sql, [username], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+
+        if (results.length === 0 || results[0].password !== password) {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+
+        res.json({
+            message: "Login successful",
+            user: {
+                id: results[0].id,
+                username: results[0].username
+            }
+        });
+    });
+});
+
+// API to Fetch Trains Between Selected Stations
+app.get("/trains", (req, res) => {
+    const { from, to } = req.query;
+
+    if (!from || !to) {
+        return res.status(400).json({ message: "Missing FROM or TO parameter" });
+    }
+
+    const sql = "SELECT * FROM trains WHERE source = ? AND destination = ?";
+    
+    db.query(sql, [from, to], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+        res.json(results);
+    });
+});
+
+// API to Fetch Buses Between Selected Stations
+app.get("/buses", (req, res) => {
+    const { from, to } = req.query;
+
+    if (!from || !to) {
+        return res.status(400).json({ message: "Missing FROM or TO parameter" });
+    }
+
+    const sql = "SELECT * FROM buses WHERE source = ? AND destination = ?";
+    
+    db.query(sql, [from, to], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+        res.json(results);
+    });
+});
+
 // Start the Server
-app.listen(5501, () => {
-    console.log("Server running on http://localhost:5501");
+app.listen(5510, () => {
+    console.log("Server running on http://localhost:5510");
 });
