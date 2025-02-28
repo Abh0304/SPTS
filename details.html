@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid black;
+        }
+        th {
+            background: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Train Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Train Number</th>
+                <th>Train Name</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody id="trainTable">
+            <tr><td colspan="5">Loading...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return { from: params.get("from"), to: params.get("to") };
+        }
+
+        async function fetchTrains() {
+            const { from, to } = getQueryParams();
+            document.title = `Trains from ${from} to ${to}`;
+
+            try {
+                const response = await fetch(`http://localhost:5510/trains?from=${from}&to=${to}`);
+                const trains = await response.json();
+
+                const trainTable = document.getElementById("trainTable");
+                trainTable.innerHTML = "";
+
+                if (trains.length === 0) {
+                    trainTable.innerHTML = "<tr><td colspan='5'>No trains available</td></tr>";
+                    return;
+                }
+
+                trains.forEach(train => {
+                    let randomValue = Math.random() * 10; // Generates a value between 0 and 10
+                    let rowColor = "green"; // Default color
+
+                    if (randomValue > 8 && randomValue < 10) {
+                        rowColor = "red";
+                    } else if (randomValue >= 4 && randomValue < 8) {
+                        rowColor = "yellow";
+                    }
+                    const row = `<tr style="background-color: ${rowColor};">
+                        <td>${train.train_number}</td>
+                        <td>${train.train_name}</td>
+                        <td>${train.departure_time}</td>
+                        <td>${train.arrival_time}</td>
+                        <td>${train.duration}</td>
+                    </tr>`;
+                    trainTable.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error fetching train details:", error);
+                document.getElementById("trainTable").innerHTML = "<tr><td colspan='5'>Failed to load trains</td></tr>";
+            }
+        }
+
+        fetchTrains();
+    </script>
+</body>
+</html>
