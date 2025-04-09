@@ -13,7 +13,7 @@
             text-align: center;
         }
         table {
-            width: 80%;
+            width: 90%;
             margin: auto;
             border-collapse: collapse;
             background: white;
@@ -38,24 +38,38 @@
                 <th>Departure Time</th>
                 <th>Arrival Time</th>
                 <th>Duration</th>
+                <th>Crowd Density</th>
             </tr>
         </thead>
         <tbody id="trainTable">
-            <tr><td colspan="5">Loading...</td></tr>
+            <tr><td colspan="6">Loading...</td></tr>
         </tbody>
     </table>
 
     <script>
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            return { from: params.get("from"), to: params.get("to") };
+        let currentDensity = 0;
+
+        async function fetchCrowdDensity() {
+            try {
+                const response = await fetch('http://localhost:5500/density');
+                const data = await response.json();
+                currentDensity = data.density;
+            } catch (error) {
+                console.error("Error fetching crowd density:", error);
+                currentDensity = "N/A";
+            }
         }
 
         async function fetchTrains() {
-            const { from, to } = getQueryParams();
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get("from");
+            const to = params.get("to");
+
             document.title = `Trains from ${from} to ${to}`;
 
             try {
+                await fetchCrowdDensity();
+
                 const response = await fetch(`http://localhost:5510/trains?from=${from}&to=${to}`);
                 const trains = await response.json();
 
@@ -63,35 +77,40 @@
                 trainTable.innerHTML = "";
 
                 if (trains.length === 0) {
-                    trainTable.innerHTML = "<tr><td colspan='5'>No trains available</td></tr>";
+                    trainTable.innerHTML = "<tr><td colspan='6'>No trains available</td></tr>";
                     return;
                 }
 
                 trains.forEach(train => {
-                    let randomValue = Math.random() * 10; // Generates a value between 0 and 10
-                    let rowColor = "green"; // Default color
+                    let rowColor = "green";
 
-                    if (randomValue > 8 && randomValue < 10) {
+                    if (currentDensity === "N/A") {
+                        rowColor = "#ccc";
+                    } else if (currentDensity > 70) {
                         rowColor = "red";
-                    } else if (randomValue >= 4 && randomValue < 8) {
+                    } else if (currentDensity > 40) {
                         rowColor = "yellow";
                     }
+
                     const row = `<tr style="background-color: ${rowColor};">
                         <td>${train.train_number}</td>
                         <td>${train.train_name}</td>
                         <td>${train.departure_time}</td>
                         <td>${train.arrival_time}</td>
                         <td>${train.duration}</td>
+                        <td>${currentDensity}</td>
                     </tr>`;
+
                     trainTable.innerHTML += row;
                 });
             } catch (error) {
                 console.error("Error fetching train details:", error);
-                document.getElementById("trainTable").innerHTML = "<tr><td colspan='5'>Failed to load trains</td></tr>";
+                document.getElementById("trainTable").innerHTML = "<tr><td colspan='6'>Failed to load trains</td></tr>";
             }
         }
 
         fetchTrains();
+        setInterval(fetchTrains, 10000);
     </script>
 </body>
 </html>
